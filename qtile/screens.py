@@ -1,8 +1,13 @@
-from libqtile import bar, layout, widget
+from libqtile import bar, layout
 from libqtile.config import Screen
 from libqtile.lazy import lazy
-import fontawesome as fa
+# import fontawesome as fa
+
+from qtile_extras import widget
+from qtile_extras.widget.decorations import RectDecoration, PowerLineDecoration
+
 from theme import *
+from colors import *
 
 left_triangle = ""
 right_triangle = ""
@@ -11,64 +16,55 @@ backslash = "◥"
 slash = "◣"
 left_separator = slash
 right_separator = backslash
-bar_height = 20
+bar_height = 40
+radius = 20
 
+widget_defaults = dict(
+    font="JetBrains Mono",  # "Source Code Pro Regular", "Expansiva"
+    fontsize=12,
+    padding=10,
+    foreground=foreground,
+    background=transparent,
+)
 
+extension_defaults = widget_defaults.copy()
+
+custom_spacer = widget.Spacer(length=5)
 
 default = [
     #region First Section of the bar
 
-    widget.TextBox(
-        text=" ",
-        background=aqua,
-    ),
-    # CPU
-    widget.TextBox(
-        text=fa.icons['microchip'],
-        background=aqua,
-        font="Font Awesome 6 Free",
-    ),
-    widget.CPU(
-        format="{load_percent:2.1f}%",
-        background=aqua,
-    ),
-
-    widget.TextBox(
-        text=right_triangle,
-        foreground=aqua,
-        padding=0,
-        background=blue0,
-        fontsize=38,
-    ),
-
-    # Memory
-    widget.TextBox(
-        text=fa.icons['memory'],
-        background=blue0,
-        font="Font Awesome 6 Free",
-    ),
-    widget.Memory(
-        background=blue0,
-        format="{MemUsed: .0f}{mm}",
-    ),
-
-    widget.TextBox(
-        text=right_triangle,
-        foreground=blue0,
-        padding=0,
+    widget.CurrentLayoutIcon(
         background=transparent,
-        fontsize=38,
+        scale=0.75,
+        decorations=[
+            RectDecoration(colour=colors[0], radius=radius, filled=True, padding_y=0)
+        ]
     ),
-    # widget.CurrentLayout(
-    # ),
+    custom_spacer,
+    # CPU   
+    widget.CPU(
+        format="\uf2db {load_percent:2.1f}%",
+        decorations=[
+            RectDecoration(colour=[colors[4], colors[0], colors[4]], radius=radius, filled=True, padding_y=0)
+        ]
+    ),
+    custom_spacer,    
+    widget.Memory(
+        format="\uf1c0 {MemUsed: .0f}{mm}",
+        padding=20,
+        decorations=[
+            RectDecoration(colour=colors[0], radius=radius, filled=True, padding_y=0)
+        ]
+    ),
+
 
     widget.Spacer(
         foreground=background,
-        background=transparent,
     ),
     widget.GroupBox(
         disable_drag=True,
-        spacing=10,
+        spacing=1,
         center_aligned=True,
         active=purple,
         inactive=blue,
@@ -78,10 +74,11 @@ default = [
         urgent_border=warning,
         hide_unused=False,
         font="Font Awesome 6 Free",
-        background=transparent,
         foreground=foreground,
         fontsize=22,
-
+        decorations=[
+            RectDecoration(colour=colors[0], radius=radius, filled=True, padding_y=0)
+        ]
     ),
 
     # prompt will not use since i'm running drun
@@ -91,117 +88,65 @@ default = [
 
     #endregion
 
-    # widget.WindowName(
-    #     foreground=background,
-    #     background="#00000000"
-    # ),
     widget.Spacer(
         foreground=background,
-        background=transparent,
     ),
 
     
     # region end section
     widget.Systray(
-        background=transparent,
         icon_size=20,
     ),
-    widget.TextBox(
-        text=left_triangle,
-        foreground=red,
-        padding=0,
-        background=transparent,
-        fontsize=38,
-    ),
-    widget.TextBox(
-        text=fa.icons['headphones'],
-        background=red,
-        font="Font Awesome 6 Free",
-    ),
-    widget.Volume(
-        fmt="{}",
-        background=red,
-        volume_app="pactl",
-    ),
-    widget.TextBox(
-        text=left_triangle,
-        foreground=green,
-        padding=0,
-        background=red,
-        fontsize=38,
-    ),
 
-    widget.Battery(
-        notify_below=20,
-        format="{char}",
-        charge_char=fa.icons['plug'],
-        background=green,
-        discharge_char=fa.icons['bolt'],
-        update_interval = 5,
-        font="Expansiva",
+    # widget.Textbox(
+    #     **rounded_right,
+    # ),
+
+    widget.Volume(
+        fmt="\uf025 {}",
+        volume_app="pactl",
+        decorations=[
+            RectDecoration(colour=colors[0], radius=radius, filled=True, padding_y=0)
+        ]
     ),
+    custom_spacer,
     widget.Battery(
         notify_below=40,
-        format="{percent:2.1%} {hour:d}:{min:02d}",
-        background=green,
-        # font="Expansiva",
+        format="{char} {percent:2.1%} {hour:d}:{min:02d}",
+        charge_char='\uf1e6',
+        background=transparent,
+        discharge_char='\uf0e7',
+        update_interval = 5,
+        font="JetBrains Mono",
+        decorations=[
+            RectDecoration(colour=colors[0], radius=radius, filled=True, padding_y=0)
+        ]
     ),
+    custom_spacer,
     # calendar
-    widget.TextBox(
-        text=left_triangle,
-        foreground=yellow,
-        padding=0,
-        background=green,
-        fontsize=38,
-    ),
-    widget.TextBox(
-        text=fa.icons['calendar'],
-        background=yellow,
-        font="Font Awesome 6 Free",
-    ),
+
     widget.Clock(
-        format="%d.%m",
-        background=yellow,
+        format="\uf133 %d.%m \uf017 %a %I:%M %p",
+        background=transparent,
+        decorations=[
+            RectDecoration(colour=colors[0], radius=radius, filled=True, padding_y=0)
+        ]
     ),
-    widget.TextBox(
-        text=left_triangle,
-        foreground=blue,
-        padding=0,
-        background=yellow,
-        fontsize=38,
-    ),
-    widget.TextBox(
-        text=fa.icons['clock'],
-        background=blue,
-        font="Font Awesome 6 Free",
-    ),
-    widget.Clock(
-        format="%a %I:%M %p",
-        background=blue,
-    ),
-    widget.TextBox(
-        text=left_triangle,
-        foreground=purple,
-        padding=0,
-        background=blue,
-        fontsize=38,
-    ),
+    custom_spacer,
     widget.TextBox(
         text="\u23fb",
         fontsize=16,
+        padding=20,
         mouse_callbacks={
             "Button1": lazy.spawn("systemctl suspend"),
             "Button2": lazy.spawn("systemctl restart"),
             "Button3": lazy.spawn("sudo shutdown -h now"),
         },
-        background=purple,
+        background=transparent,
+        decorations=[
+            RectDecoration(colour=colors[0], radius=radius, filled=True, padding_y=0)
+        ],
     ),
-    widget.Sep(
-        linewidth=5,
-        background=purple,
-        foreground=purple,
-    ),
-
     # endregion
 ]
 
@@ -212,13 +157,15 @@ screens = [
         wallpaper_mode="fill",
         top=bar.Bar(
             default,
-            25,
+            bar_height,
+            margin=[10,6,4,6],
             # margins=[2, 0, 0, 0],
             # border_width=[4, 0, 4, 0],
             # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"],  # Borders are magenta
             opacity=1,
-            background="#00000000",
+            background=transparent,
+            border_color=transparent,
         ),
     ),
 ]
@@ -236,3 +183,10 @@ screens = [
                 # widget.TextBox("default config", name="default"),
                 # widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
 
+    # widget.TextBox(
+    #     text=left_triangle,
+    #     foreground=purple,
+    #     padding=0,
+    #     background=blue,
+    #     fontsize=38,
+    # ),
