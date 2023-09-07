@@ -33,17 +33,14 @@ import os
 import subprocess
 from gruvbox.gruvbox import *
 from theme import *
+import fontawesome as fa
+
+from screens import *
+
 
 mod = "mod4"
 terminal = guess_terminal()
-left_triangle = ""
-right_triangle = ""
 
-backslash = "◥"
-slash = "◣"
-left_separator = slash
-right_separator = backslash
-bar_height = 20
 
 
 # COLORS FOR THE BAR
@@ -109,6 +106,8 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen"),
+    
 
     # Keys related to Audio
 
@@ -122,34 +121,40 @@ keys = [
         "pactl set-source-mute @DEFAULT_SOURCE@ toggle")),
 
     # Keys related to media
-    Key([],"XF86AudioNext", lazy.spawn("mpc next")),
-    Key([],"XF86AudioPrev", lazy.spawn("mpc prev")),
-    Key([],"XF86AudioPlay", lazy.spawn("mpc toggle")),
+    # Key([],"XF86AudioNext", lazy.spawn("mpc next")),
+    # Key([],"XF86AudioPrev", lazy.spawn("mpc prev")),
+    # Key([],"XF86AudioPlay", lazy.spawn("mpc toggle")),
+    Key([],"XF86AudioNext", lazy.spawn("playerctl next")),
+    Key([],"XF86AudioPrev", lazy.spawn("playerctl  previous")),
+    Key([],"XF86AudioPlay", lazy.spawn("playerctl play-pause")),
 
     # Keys Related to Brightness
     Key([], "XF86MonBrightnessUp", lazy.spawn(
-        "xbackligght -inc 10")),
+        "xbacklight -inc 10")),
     Key([], "XF86MonBrightnessDown", lazy.spawn(
         "xbacklight -dec 10")),
 
     # Open program
-    Key([mod], "e", lazy.spawn("thunar")),
+    Key([mod], "e", lazy.spawn("nautilus")),
     Key([mod, "shift"], "w", lazy.spawn("firefox")),
+
+    # launch rofi to find a program
+    Key([mod], "m", lazy.spawn("rofi -show drun"), desc="Launch rofi"),
 ]
 
 # groups = [Group(i) for i in "1234567890"]
 
 
 def init_group_names():
-    return [("I", {"layout": "columns"}),
-            ("II", {"layout": "columns"}),
-            ("III", {"layout": "columns"}),
-            ("IV", {"layout": "columns"}),
-            ("V", {"layout": "columns"}),
-            ("VI", {"layout": "columns"}),
-            ("VII", {"layout": "columns"}),
-            ("VIII", {"layout": "columns"}),
-            ("IX", {"layout": "columns"}),
+    return [(fa.icons['firefox'], {"layout": "columns"}),
+            (fa.icons['folder'], {"layout": "columns"}),
+            (fa.icons['java'], {"layout": "columns"}),
+            (fa.icons['python'], {"layout": "columns"}),
+            (fa.icons['book'], {"layout": "columns"}),
+            (fa.icons['image'], {"layout": "columns"}),
+            (fa.icons['terminal'], {"layout": "columns"}),
+            ('\uf27a', {"layout": "columns"}),
+            ('\uf1fc', {"layout": "columns"}),
             ]
 
 
@@ -208,196 +213,17 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="JetBrains Mono",  # "Source Code Pro Regular",
+    font="JetBrains Mono",  # "Source Code Pro Regular", "Expansiva"
     fontsize=12,
     padding=3,
     foreground=foreground,
     background=background,
 )
+
 extension_defaults = widget_defaults.copy()
 
-screens = [
-    Screen(
-        wallpaper="~/Pictures/wallpapers/pxfuel.jpg",
-        wallpaper_mode="fill",
 
-        top=bar.Bar(
-            [
-                # CPU
-
-                widget.CPU(
-                    format="CPU {load_percent:2.1f}%",
-                    background=aqua,
-                    font="Expansiva",
-                ),
-                widget.TextBox(
-                    text=right_triangle,
-                    foreground=aqua,
-                    padding=0,
-                    background=blue0,
-                    fontsize=38,
-                ),
-
-                # Memory
-                widget.Memory(
-                    background=blue0,
-                    format="{MemUsed: .0f}{mm}",
-                    font="Expansiva",
-                ),
-                widget.TextBox(
-                    text=right_triangle,
-                    foreground=blue0,
-                    padding=0,
-                    background=background,
-                    fontsize=38,
-                ),
-                widget.CurrentLayout(
-                    font="Expansiva",
-                ),
-                widget.GroupBox(
-                    disable_drag=True,
-                    spacing=0,
-                    center_aligned=True,
-                    active=active,
-                    inactive=inactive,
-                    highlight_method="block",
-                    this_current_screen_border=mark,
-                    urgent_border=warning,
-                    hide_unused=True,
-                    font="Expansiva",
-                ),
-
-
-                widget.Prompt(
-                    background=background,
-                    font="Expansiva",
-                ),
-                widget.WindowName(
-                    foreground=background,
-                    font="Expansiva",
-                    # background="#000000",
-                ),
-                # widget.Chord(
-                #    chords_colors={
-                #        "launch": ("#ff0000", "#ffffff"),
-                #    },
-                #    name_transform=lambda name: name.upper(),
-                # ),
-                # widget.TextBox("default config", name="default"),
-                # widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
-
-
-                widget.TextBox(
-                    text=left_triangle,
-                    foreground=red,
-                    padding=0,
-                    background=background,
-                    fontsize=38,
-                ),
-                widget.Volume(
-                    fmt="Vol: {}",
-                    background=red,
-                    volume_app="pactl",
-                    font="Expansiva",
-                ),
-                ######################################################
-                widget.TextBox(
-                    text=left_triangle,
-                    foreground=green,
-                    padding=0,
-                    background=red,
-                    fontsize=38,
-                ),
-                widget.BatteryIcon(
-                    background=green,
-                ),
-                widget.Battery(
-                    notify_below=20,
-                    format="{char}",
-                    charge_char="⬆",
-                    background=green,
-                    discharge_char="⬇",
-                    update_interval = 5,
-                    font="Expansiva",
-                ),
-                widget.Battery(
-                    notify_below=20,
-                    format="{percent:2.1%} {hour:d}:{min:02d}",
-                    background=green,
-                    font="Expansiva",
-                ),
-                #####################################################
-                widget.TextBox(
-                    text=left_triangle,
-                    foreground=yellow,
-                    padding=0,
-                    background=green,
-                    fontsize=38,
-                ),
-                widget.Clock(
-                    format="%d.%m",
-                    background=yellow,
-                    font="Expansiva",
-                ),
-                #######################################################
-                widget.TextBox(
-                    text=left_triangle,
-                    foreground=blue,
-                    padding=0,
-                    background=yellow,
-                    fontsize=38,
-                ),
-                widget.Clock(
-                    format="%a %I:%M %p",
-                    background=blue,
-                    font="Expansiva",
-                ),
-                widget.TextBox(
-                    text=left_triangle,
-                    foreground=purple,
-                    padding=0,
-                    background=blue,
-                    fontsize=38,
-                ),
-                widget.Systray(
-                    background=purple,
-                    icon_size=10,
-                ),
-                widget.TextBox(
-                    text=" ",
-                    background=purple,
-                ),
-    
-                widget.TextBox(
-                    text="\u23fb",
-                    fontsize=16,
-                    mouse_callbacks={
-                        "Button1": lazy.spawn("systemctl suspend"),
-                        "Button2": lazy.spawn("systemctl restart"),
-                        "Button3": lazy.spawn("sudo shutdown -h now"),
-                    },
-                    background=purple,
-                ),
-                widget.Sep(
-                    linewidth=5,
-                    background=purple,
-                    foreground=purple,
-                ),
-
-                #####################################################
-
-                # widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-                # widget.QuickExit(),
-            ],
-            20,
-            # margins=[2, 0, 0, 0],
-            # border_width=[4, 0, 4, 0],
-            # Draw top and bottom borders
-            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
-            opacity=0.8,
-        ),
-    ),
-]
+# screens used to be here
 
 # Drag floating layouts.
 mouse = [
