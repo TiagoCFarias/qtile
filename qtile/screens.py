@@ -4,7 +4,7 @@ from libqtile.lazy import lazy
 # import fontawesome as fa
 
 from qtile_extras import widget
-from qtile_extras.widget.decorations import RectDecoration, PowerLineDecoration
+from qtile_extras.widget.decorations import RectDecoration
 
 from theme import *
 from colors import *
@@ -16,11 +16,11 @@ backslash = "◥"
 slash = "◣"
 left_separator = slash
 right_separator = backslash
-bar_height = 40
-radius = 20
+bar_height = 30 
+radius = bar_height / 2
 
 widget_defaults = dict(
-    font="JetBrains Mono",  # "Source Code Pro Regular", "Expansiva"
+    font="NovaMono for Powerline",  # "Source Code Pro Regular", "Expansiva"
     fontsize=12,
     padding=10,
     foreground=foreground,
@@ -31,6 +31,8 @@ extension_defaults = widget_defaults.copy()
 
 custom_spacer = widget.Spacer(length=5)
 
+background_gradient = [colors[0], colors[3], colors[0]]
+
 default = [
     #region First Section of the bar
 
@@ -38,98 +40,99 @@ default = [
         background=transparent,
         scale=0.75,
         decorations=[
-            RectDecoration(colour=colors[0], radius=radius, filled=True, padding_y=0)
-        ]
+            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
+        ],
     ),
     custom_spacer,
     # CPU   
     widget.CPU(
         format="\uf2db {load_percent:2.1f}%",
+        foreground=foreground,
         decorations=[
-            RectDecoration(colour=[colors[4], colors[0], colors[4]], radius=radius, filled=True, padding_y=0)
+            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
         ]
     ),
     custom_spacer,    
     widget.Memory(
         format="\uf1c0 {MemUsed: .0f}{mm}",
         padding=20,
+        foreground=foreground,
         decorations=[
-            RectDecoration(colour=colors[0], radius=radius, filled=True, padding_y=0)
+            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
         ]
     ),
-
+    custom_spacer,
+    widget.ThermalSensor(
+        format="\uf2c7 {temp:.1f}{unit}",
+        decorations=[
+            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
+        ]
+    ),
 
     widget.Spacer(
         foreground=background,
     ),
     widget.GroupBox(
         disable_drag=True,
-        spacing=1,
+        spacing=0,
         center_aligned=True,
-        active=purple,
-        inactive=blue,
+        # highlight_color=white,
+        active=blue0,
+        inactive=colors[3],
         highlight_method="text",
-        highlight_color=transparent,
-        this_current_screen_border=mark,
+        this_current_screen_border=white0,
         urgent_border=warning,
         hide_unused=False,
-        font="Font Awesome 6 Free",
+        # font="Font Awesome 6 Free",
+        font="Font Awesome 6 Bold",
         foreground=foreground,
-        fontsize=22,
+        fontsize=15,
         decorations=[
-            RectDecoration(colour=colors[0], radius=radius, filled=True, padding_y=0)
+            RectDecoration(colour=transparent, radius=radius, filled=True, padding_y=0)
         ]
     ),
-
-    # prompt will not use since i'm running drun
-    # widget.Prompt(
-    #     background=background,
-    # ),
-
-    #endregion
 
     widget.Spacer(
         foreground=background,
     ),
 
+    custom_spacer,
     
-    # region end section
     widget.Systray(
         icon_size=20,
     ),
 
-    # widget.Textbox(
-    #     **rounded_right,
-    # ),
+    custom_spacer,
 
     widget.Volume(
         fmt="\uf025 {}",
         volume_app="pactl",
+        foreground=foreground,
         decorations=[
-            RectDecoration(colour=colors[0], radius=radius, filled=True, padding_y=0)
+            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
         ]
     ),
     custom_spacer,
     widget.Battery(
         notify_below=40,
-        format="{char} {percent:2.1%} {hour:d}:{min:02d}",
+        format="{char} {percent:2.1%} {hour:d}:{min:02d} {watt:.2f} W",
         charge_char='\uf1e6',
         background=transparent,
+        foreground=foreground,
         discharge_char='\uf0e7',
         update_interval = 5,
         font="JetBrains Mono",
         decorations=[
-            RectDecoration(colour=colors[0], radius=radius, filled=True, padding_y=0)
+            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
         ]
     ),
     custom_spacer,
-    # calendar
 
     widget.Clock(
-        format="\uf133 %d.%m \uf017 %a %I:%M %p",
-        background=transparent,
+        format="\uf017 %a %I:%M %p \uf133 %d.%m",
+        foreground=foreground,
         decorations=[
-            RectDecoration(colour=colors[0], radius=radius, filled=True, padding_y=0)
+            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
         ]
     ),
     custom_spacer,
@@ -142,9 +145,10 @@ default = [
             "Button2": lazy.spawn("systemctl restart"),
             "Button3": lazy.spawn("sudo shutdown -h now"),
         },
+        foreground=foreground,
         background=transparent,
         decorations=[
-            RectDecoration(colour=colors[0], radius=radius, filled=True, padding_y=0)
+            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
         ],
     ),
     # endregion
@@ -158,7 +162,8 @@ screens = [
         top=bar.Bar(
             default,
             bar_height,
-            margin=[10,6,4,6],
+            margin=[int(bar_height / 4),int(bar_height / 6), int(bar_height / 4), int(bar_height / 6)],
+            # 4, 6 
             # margins=[2, 0, 0, 0],
             # border_width=[4, 0, 4, 0],
             # Draw top and bottom borders
