@@ -24,22 +24,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from libqtile import bar, layout, widget
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile import layout
+from libqtile.config import Click, Drag, Group, Key, Match
 from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
 from libqtile import hook
 import os
 import subprocess
 from gruvbox.gruvbox import *
 from theme import *
-import fontawesome as fa
+# import fontawesome as fa
 
 from screens import *
+from keys import *
 
 
 mod = "mod4"
-terminal = guess_terminal()
 
 
 
@@ -62,114 +61,48 @@ catppuccin = {
 }
 
 
-keys = [
-    # A list of available commands that can be bound to keys can be found
-    # at https://docs.qtile.org/en/latest/manual/config/lazy.html
-    # Switch between windows
-    Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
-    Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
-    Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
-    Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
-    Key([mod], "space", lazy.layout.next(),
-        desc="Move window focus to other window"),
-    # Move windows between left/right columns or move up/down in current stack.
-    # Moving out of range in Columns layout will create new column.
-    Key([mod, "shift"], "h", lazy.layout.shuffle_left(),
-        desc="Move window to the left"),
-    Key([mod, "shift"], "l", lazy.layout.shuffle_right(),
-        desc="Move window to the right"),
-    Key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
-    Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
-    # Grow windows. If current window is on the edge of screen and direction
-    # will be to screen edge - window would shrink.
-    Key([mod, "control"], "h", lazy.layout.grow_left(),
-        desc="Grow window to the left"),
-    Key([mod, "control"], "l", lazy.layout.grow_right(),
-        desc="Grow window to the right"),
-    Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
-    Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
-    Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
-    # Toggle between split and unsplit sides of stack.
-    # Split = all windows displayed
-    # Unsplit = 1 window displayed, like Max layout, but still with
-    # multiple stack panes
-    Key(
-        [mod, "shift"],
-        "Return",
-        lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack",
-    ),
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    # Toggle between different layouts as defined below
-    Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
-    Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
-    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-    Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen"),
-    
-
-    # Keys related to Audio
-
-    Key([], "XF86AudioRaiseVolume", lazy.spawn(
-        "amixer set Master 3%+")),
-    Key([], "XF86AudioLowerVolume", lazy.spawn(
-        "amixer set Master 3%-")),
-    Key([], "XF86AudioMute", lazy.spawn(
-        "amixer set Master toggle")),
-    Key([], "XF86AudioMicMute", lazy.spawn(
-        "pactl set-source-mute @DEFAULT_SOURCE@ toggle")),
-
-    # Keys related to media
-    # Key([],"XF86AudioNext", lazy.spawn("mpc next")),
-    # Key([],"XF86AudioPrev", lazy.spawn("mpc prev")),
-    # Key([],"XF86AudioPlay", lazy.spawn("mpc toggle")),
-    Key([],"XF86AudioNext", lazy.spawn("playerctl next")),
-    Key([],"XF86AudioPrev", lazy.spawn("playerctl  previous")),
-    Key([],"XF86AudioPlay", lazy.spawn("playerctl play-pause")),
-
-    # Keys Related to Brightness
-    Key([], "XF86MonBrightnessUp", lazy.spawn(
-        "xbacklight -inc 10")),
-    Key([], "XF86MonBrightnessDown", lazy.spawn(
-        "xbacklight -dec 10")),
-
-    # Open program
-    Key([mod], "e", lazy.spawn("nautilus")),
-    Key([mod, "shift"], "w", lazy.spawn("firefox")),
-
-    # launch rofi to find a program
-    Key([mod], "m", lazy.spawn("rofi -show drun"), desc="Launch rofi"),
-]
 
 # groups = [Group(i) for i in "1234567890"]
 
 
 def init_group_names():
-    return [(fa.icons['firefox'], {"layout": "columns"}),
-            (fa.icons['folder'], {"layout": "columns"}),
-            (fa.icons['java'], {"layout": "columns"}),
-            (fa.icons['python'], {"layout": "columns"}),
-            (fa.icons['book'], {"layout": "columns"}),
-            (fa.icons['image'], {"layout": "columns"}),
-            (fa.icons['terminal'], {"layout": "columns"}),
-            ('\uf27a', {"layout": "columns"}),
-            ('\uf1fc', {"layout": "columns"}),
+    return [('1', {"label":"\uf111", "layout": "columns"}),                      # fa.icons['firefox']
+            ('2', {"label":"\uf111", "layout": "columns"}),                      # fa.icons['folder']
+            ('3', {"label":"\uf111", "layout": "columns"}),                      # fa.icons['java']
+            ('4', {"label":"\uf111", "layout": "columns"}),                      # fa.icons['python']
+            ('5', {"label":"\uf111", "layout": "columns"}),                      # fa.icons['book']
+            ('6', {"label":"\uf111", "layout": "columns"}),                      # fa.icons['image']
+            ('7', {"label":"\uf111", "layout": "columns"}),                      # fa.icons['terminal']
+            ('8', {"label":"\uf111", "layout": "columns"}),
+            ('9', {"label":"\uf111", "layout": "columns"}),
             ]
+
+    # return [('\ue007', {"layout": "columns"}),                      # fa.icons['firefox']
+    #         ('\uf07b', {"layout": "columns"}),                      # fa.icons['folder']
+    #         ('\uf4e4', {"layout": "columns"}),                      # fa.icons['java']
+    #         ('\uf3e2', {"layout": "columns"}),                      # fa.icons['python']
+    #         ('\uf02d', {"layout": "columns"}),                      # fa.icons['book']
+    #         ('\uf03e', {"layout": "columns"}),                      # fa.icons['image']
+    #         ('\uf120', {"layout": "columns"}),                      # fa.icons['terminal']
+    #         ('\uf27a', {"layout": "columns"}),
+    #         ('\uf1fc', {"layout": "columns"}),
+    #         ]
 
 
 def init_groups():
-    return [Group(name, **kwargs) for name, kwargs in group_names]
+    return [Group(name, **kwargs) for name, kwargs in init_group_names()]
 
 
-if __name__ in ["config", "__main__"]:
-    group_names = init_group_names()
-    groups = init_groups()
+
+# if __name__ in ["config", "__main__"]:
+group_names = init_group_names()
+groups = init_groups()
 
 for i, (name, kwargs) in enumerate(group_names, 1):
     keys.append(Key([mod], str(i), lazy.group[name].toscreen()))
     keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name, switch_group=True)))
 
+# region old
 # for i in groups:
 #     keys.extend(
 #         [
@@ -194,14 +127,18 @@ for i, (name, kwargs) in enumerate(group_names, 1):
 #             #     desc="move focused window to group {}".format(i.name)),
 #         ]
 #     )
+# endregion
 
 layouts = [
-    layout.Columns(border_focus_stack=[
-                   "#d75f5f", "#8f3d3d"], border_width=4, margin=5,),
-    layout.Max(),
+    # layout.Columns(border_focus_stack=[
+    #                "#d75f5f", "#8f3d3d"], border_width=4, margin=5,),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
-    # layout.Bsp(),
+    layout.Bsp(
+        border_width=1,
+        margin=[0, 5, 5, 5],
+        margin_on_single=0,
+    ),
     # layout.Matrix(),
     # layout.MonadTall(),
     # layout.MonadWide(),
@@ -210,17 +147,8 @@ layouts = [
     # layout.TreeTab(),
     # layout.VerticalTile(),
     # layout.Zoomy(),
+    layout.Max(),
 ]
-
-widget_defaults = dict(
-    font="JetBrains Mono",  # "Source Code Pro Regular", "Expansiva"
-    fontsize=12,
-    padding=3,
-    foreground=foreground,
-    background=background,
-)
-
-extension_defaults = widget_defaults.copy()
 
 
 # screens used to be here
