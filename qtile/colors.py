@@ -11,6 +11,8 @@ colors = [
     "#001515",
 ]
 
+dark_purple_gradient = ["#685374", "#1b1f3a", "#685374"]
+
 gradient = [
     [colors[0], colors[1]],
     [colors[0], colors[2]],
