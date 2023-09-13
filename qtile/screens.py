@@ -6,8 +6,8 @@ from libqtile.lazy import lazy
 from qtile_extras import widget
 from qtile_extras.widget.decorations import RectDecoration
 
-from theme import *
 from colors import *
+from theme import *
 
 left_triangle = ""
 right_triangle = ""
@@ -17,10 +17,10 @@ slash = "◣"
 left_separator = slash
 right_separator = backslash
 bar_height = 30 
-radius = bar_height / 2
+radius = int(bar_height / 4)
 
 widget_defaults = dict(
-    font="NovaMono for Powerline",  # "Source Code Pro Regular", "Expansiva"
+    font="NovaMono for Powerline Bold",  # "Source Code Pro Regular", "Expansiva" "JetBrains Mono Bold",
     fontsize=12,
     padding=10,
     foreground=foreground,
@@ -31,7 +31,8 @@ extension_defaults = widget_defaults.copy()
 
 custom_spacer = widget.Spacer(length=5)
 
-background_gradient = [colors[0], colors[3], colors[0]]
+# background_gradient = [colors[0], colors[4], colors[0]]
+background_gradient = dark_purple_gradient
 
 default = [
     #region First Section of the bar
@@ -83,17 +84,12 @@ default = [
         this_current_screen_border=white0,
         urgent_border=warning,
         hide_unused=False,
-        # font="Font Awesome 6 Free",
         font="Font Awesome 6 Bold",
         foreground=foreground,
         fontsize=15,
         decorations=[
             RectDecoration(colour=transparent, radius=radius, filled=True, padding_y=0)
         ]
-    ),
-
-    widget.Spacer(
-        foreground=background,
     ),
 
     custom_spacer,
@@ -121,7 +117,6 @@ default = [
         foreground=foreground,
         discharge_char='\uf0e7',
         update_interval = 5,
-        font="JetBrains Mono",
         decorations=[
             RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
         ]
@@ -157,7 +152,7 @@ default = [
 
 screens = [
     Screen(
-        wallpaper="~/Pictures/wallpapers/mountains.jpg",
+        wallpaper="~/.config/qtile/wallpapers/mountains-moon-trees-minimalism-hd.jpg",
         wallpaper_mode="fill",
         top=bar.Bar(
             default,
