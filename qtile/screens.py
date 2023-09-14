@@ -24,12 +24,15 @@ widget_defaults = dict(
     fontsize=12,
     padding=10,
     foreground=foreground,
-    background=transparent,
+    decorations=[
+       RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
+    ],
+   background=transparent,
 )
 
 extension_defaults = widget_defaults.copy()
 
-custom_spacer = widget.Spacer(length=5)
+custom_spacer = widget.Spacer(length=5, decorations=[])
 
 # background_gradient = [colors[0], colors[4], colors[0]]
 background_gradient = dark_purple_gradient
@@ -40,38 +43,27 @@ default = [
     widget.CurrentLayoutIcon(
         background=transparent,
         scale=0.75,
-        decorations=[
-            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
-        ],
     ),
     custom_spacer,
     # CPU   
     widget.CPU(
         format="\uf2db {load_percent:2.1f}%",
         foreground=foreground,
-        decorations=[
-            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
-        ]
     ),
     custom_spacer,    
     widget.Memory(
         format="\uf1c0 {MemUsed: .0f}{mm}",
         padding=20,
         foreground=foreground,
-        decorations=[
-            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
-        ]
     ),
     custom_spacer,
     widget.ThermalSensor(
         format="\uf2c7 {temp:.1f}{unit}",
-        decorations=[
-            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
-        ]
     ),
 
     widget.Spacer(
         foreground=background,
+        decorations=[]
     ),
     widget.GroupBox(
         disable_drag=True,
@@ -87,15 +79,12 @@ default = [
         font="Font Awesome 6 Bold",
         foreground=foreground,
         fontsize=15,
-        decorations=[
-            RectDecoration(colour=transparent, radius=radius, filled=True, padding_y=0)
-        ]
+        decorations=[]
     ),
-
     custom_spacer,
-    
     widget.Systray(
         icon_size=20,
+        decorations=[]
     ),
 
     custom_spacer,
@@ -104,9 +93,6 @@ default = [
         fmt="\uf025 {}",
         volume_app="pactl",
         foreground=foreground,
-        decorations=[
-            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
-        ]
     ),
     custom_spacer,
     widget.Battery(
@@ -117,18 +103,12 @@ default = [
         foreground=foreground,
         discharge_char='\uf0e7',
         update_interval = 5,
-        decorations=[
-            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
-        ]
     ),
     custom_spacer,
 
     widget.Clock(
         format="\uf017 %a %I:%M %p \uf133 %d.%m",
         foreground=foreground,
-        decorations=[
-            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
-        ]
     ),
     custom_spacer,
     widget.TextBox(
@@ -142,11 +122,7 @@ default = [
         },
         foreground=foreground,
         background=transparent,
-        decorations=[
-            RectDecoration(colour=background_gradient, radius=radius, filled=True, padding_y=0)
-        ],
     ),
-    # endregion
 ]
 
 
@@ -158,11 +134,6 @@ screens = [
             default,
             bar_height,
             margin=[int(bar_height / 4),int(bar_height / 6), int(bar_height / 4), int(bar_height / 6)],
-            # 4, 6 
-            # margins=[2, 0, 0, 0],
-            # border_width=[4, 0, 4, 0],
-            # Draw top and bottom borders
-            # border_color=["ff00ff", "000000", "ff00ff", "000000"],  # Borders are magenta
             opacity=1,
             background=transparent,
             border_color=transparent,
@@ -170,23 +141,3 @@ screens = [
     ),
 ]
 
-# unused widgets 
-                # widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-                # widget.QuickExit(),
-
-                # widget.Chord(
-                #    chords_colors={
-                #        "launch": ("#ff0000", "#ffffff"),
-                #    },
-                #    name_transform=lambda name: name.upper(),
-                # ),
-                # widget.TextBox("default config", name="default"),
-                # widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
-
-    # widget.TextBox(
-    #     text=left_triangle,
-    #     foreground=purple,
-    #     padding=0,
-    #     background=blue,
-    #     fontsize=38,
-    # ),
