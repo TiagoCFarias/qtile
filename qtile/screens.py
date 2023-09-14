@@ -1,7 +1,6 @@
 from libqtile import bar, layout
 from libqtile.config import Screen
 from libqtile.lazy import lazy
-# import fontawesome as fa
 
 from qtile_extras import widget
 from qtile_extras.widget.decorations import RectDecoration
@@ -38,14 +37,12 @@ custom_spacer = widget.Spacer(length=5, decorations=[])
 background_gradient = dark_purple_gradient
 
 default = [
-    #region First Section of the bar
 
     widget.CurrentLayoutIcon(
         background=transparent,
         scale=0.75,
     ),
     custom_spacer,
-    # CPU   
     widget.CPU(
         format="\uf2db {load_percent:2.1f}%",
         foreground=foreground,
@@ -60,7 +57,10 @@ default = [
     widget.ThermalSensor(
         format="\uf2c7 {temp:.1f}{unit}",
     ),
-
+    custom_spacer,
+    widget.Clipboard(
+        timeout=None,
+    ),
     widget.Spacer(
         foreground=background,
         decorations=[]
