@@ -3,21 +3,19 @@ from libqtile.config import Screen
 from libqtile.lazy import lazy
 
 from qtile_extras import widget
-from qtile_extras.widget.decorations import RectDecoration
+from qtile_extras.widget.decorations import RectDecoration, PowerLineDecoration
 
 from colors import *
 from theme import *
+from color_schemes.nordtheme import * 
 
 left_triangle = ""
 right_triangle = ""
 
-backslash = "◥"
-slash = "◣"
-left_separator = slash
-right_separator = backslash
 bar_height = 30 
 radius = int(bar_height / 4)
 
+background_gradient = dark_purple_gradient
 widget_defaults = dict(
     font="NovaMono for Powerline Bold",  # "Source Code Pro Regular", "Expansiva" "JetBrains Mono Bold",
     fontsize=12,
@@ -28,30 +26,24 @@ widget_defaults = dict(
     ],
    background=transparent,
 )
-
 extension_defaults = widget_defaults.copy()
 
 custom_spacer = widget.Spacer(length=5, decorations=[])
 
-# background_gradient = [colors[0], colors[4], colors[0]]
-background_gradient = dark_purple_gradient
-
 default = [
-
     widget.CurrentLayoutIcon(
-        background=transparent,
+        background=polar_night[0],
         scale=0.75,
     ),
     custom_spacer,
     widget.CPU(
         format="\uf2db {load_percent:2.1f}%",
-        foreground=foreground,
+        background=polar_night[1],
     ),
     custom_spacer,    
     widget.Memory(
         format="\uf1c0 {MemUsed: .0f}{mm}",
-        padding=20,
-        foreground=foreground,
+        background=polar_night[2],
     ),
     custom_spacer,
     widget.ThermalSensor(
@@ -62,7 +54,6 @@ default = [
         timeout=None,
     ),
     widget.Spacer(
-        foreground=background,
         decorations=[]
     ),
     widget.GroupBox(
@@ -77,7 +68,6 @@ default = [
         urgent_border=warning,
         hide_unused=False,
         font="Font Awesome 6 Bold",
-        foreground=foreground,
         fontsize=15,
         decorations=[]
     ),
@@ -92,7 +82,6 @@ default = [
     widget.Volume(
         fmt="\uf025 {}",
         volume_app="pactl",
-        foreground=foreground,
     ),
     custom_spacer,
     widget.Battery(
@@ -100,7 +89,6 @@ default = [
         format="{char} {percent:2.1%} {hour:d}:{min:02d} {watt:.2f} W",
         charge_char='\uf1e6',
         background=transparent,
-        foreground=foreground,
         discharge_char='\uf0e7',
         update_interval = 5,
     ),
@@ -108,7 +96,6 @@ default = [
 
     widget.Clock(
         format="\uf017 %a %I:%M %p \uf133 %d.%m",
-        foreground=foreground,
     ),
     custom_spacer,
     widget.TextBox(
@@ -120,11 +107,8 @@ default = [
             "Button2": lazy.spawn("systemctl restart"),
             "Button3": lazy.spawn("sudo shutdown -h now"),
         },
-        foreground=foreground,
-        background=transparent,
     ),
 ]
-
 
 screens = [
     Screen(
