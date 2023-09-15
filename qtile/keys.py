@@ -63,7 +63,7 @@ keys = [
     Key([], "XF86AudioLowerVolume", lazy.spawn(
         "amixer set Master 3%-")),
     Key([], "XF86AudioMute", lazy.spawn(
-        "amixer set Master toggle")),
+       "amixer set Master toggle")),
     Key([], "XF86AudioMicMute", lazy.spawn(
         "pactl set-source-mute @DEFAULT_SOURCE@ toggle")),
 
