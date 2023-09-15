@@ -34,7 +34,7 @@ from gruvbox.gruvbox import *
 from theme import *
 # import fontawesome as fa
 
-from screens import *
+from screens_powerline import *
 from keys import *
 
 
